@@ -27,8 +27,8 @@ fi
 # vendor
 echo "-----> Vendoring OpenCV shared objects into slug"
 VENDORED_SO="$BUILD_DIR/vendor/opencv/lib"
-mkdir -p VENDORED_SO
-cp -a "$VENDORED_OPENCV/lib/." VENDORED_SO
+mkdir -p $VENDORED_SO
+cp -a "$VENDORED_OPENCV/lib/." $VENDORED_SO
 
 # runtime
 echo "export LD_LIBRARY_PATH=\"\$HOME/vendor/opencv/lib:\$LD_LIBRARY_PATH\"" > $BUILD_DIR/.profile.d/opencv.sh
