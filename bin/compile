@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# bin/compile <build-dir> <cache-dir>
+
+# fail fast
+set -e
+
+# parse params
+BUILD_DIR=$1
+CACHE_DIR=$2
+
+# fetch and cache the vulcan build
+OPENCV_PACKAGE="http://s3.amazonaws.com/tznode/vulcan-compiled-opencv.tgz"
+VENDORED_OPENCV="/app/vendor/opencv"
+OPENCV_CACHE="$CACHE_DIR/opencv_a4c8444d7bae2a219b4ea9cb68919637";
+
+if [ -d "$OPENCV_CACHE" ]; then
+  echo "-----> Reusing cached OpenCV"
+  cp -a $OPENCV_CACHE $VENDORED_OPENCV
+else
+  echo "-----> Fetching and caching OpenCV"
+  mkdir -p $VENDORED_OPENCV
+  curl $OPENCV_PACKAGE -s -o - | tar xzf - -C $VENDORED_OPENCV
+  mkdir -p $CACHE_DIR
+  cp -a $VENDORED_OPENCV $OPENCV_CACHE
+fi
+
+# vendor
+echo "-----> Vendoring OpenCV shared objects into slug"
+VENDORED_SO="$BUILD_DIR/vendor/opencv/lib"
+mkdir -p VENDORED_SO
+cp -a "$VENDORED_OPENCV/lib/." VENDORED_SO
+
+# runtime
+echo "export LD_LIBRARY_PATH=\"\$HOME/vendor/opencv/lib:\$LD_LIBRARY_PATH\"" > $BUILD_DIR/.profile.d/opencv.sh
+echo "export PKG_CONFIG_PATH=\"\$HOME/vendor/opencv/lib/pkgconfig:\$PKG_CONFIG_PATH\"" >> $BUILD_DIR/.profile.d/opencv.sh

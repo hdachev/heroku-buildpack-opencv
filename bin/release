@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+# do nothing!
+cat <<EOF
+---
+config_vars:
+  LD_LIBRARY_PATH: /app/vendor/opencv/lib:$LD_LIBRARY_PATH
+  PKG_CONFIG_PATH: /app/vendor/opencv/lib/pkgconfig:$PKG_CONFIG_PATH
+EOF
