@@ -32,5 +32,6 @@ mkdir -p $VENDORED_SO
 cp -a "$VENDORED_OPENCV/lib/." $VENDORED_SO
 
 # runtime
+mkdir -p "$BUILD_DIR/.profile.d"
 echo "export LD_LIBRARY_PATH=\"\$HOME/vendor/opencv/lib:\$LD_LIBRARY_PATH\"" > $BUILD_DIR/.profile.d/opencv.sh
 echo "export PKG_CONFIG_PATH=\"\$HOME/vendor/opencv/lib/pkgconfig:\$PKG_CONFIG_PATH\"" >> $BUILD_DIR/.profile.d/opencv.sh
